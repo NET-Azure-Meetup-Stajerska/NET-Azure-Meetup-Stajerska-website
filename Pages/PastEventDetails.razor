@@ -1,0 +1,149 @@
+﻿@page "/history/{Id:int}"
+@using System.Net.Http
+@using System.Net.Http.Json
+@using NET_Azure_Meetup_Stajerska_website.Data
+@inject HttpClient Http
+
+@if (currentEvent == null)
+{
+<div class="container py-5">
+    <p><em>Loading event details...</em></p>
+</div>
+}
+else
+{
+
+<div class="container py-5">
+
+    <section class="mb-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-12">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="date-badge text-white rounded-3 p-3 me-4 text-center">
+                                        <div class="h4 mb-0 fw-bold">@currentEvent.Date.Day</div>
+                                        <div class="small">@currentEvent.Date.ToString("MMM").ToUpper()</div>
+                                    </div>
+                                    <div>
+                                        <h3 class="h5 mb-1">@currentEvent.Title</h3>
+                                        <p class="text-muted mb-0">
+                                            <i class="bi bi-clock me-1"></i> @currentEvent.Date.ToString("HH:mm")
+                                            - @currentEvent.Date.AddHours(2.5).ToString("HH:mm") CEST
+                                            <i class="bi bi-geo-alt ms-3 me-1"></i>@currentEvent.Location
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @if (currentEvent.Speakers != null && currentEvent.Speakers.Any())
+    {
+    <section id="speakers" class="mb-5">
+        <h2 class="h3 text-primary mb-4 border-bottom pb-2">Speakers</h2>
+        <div class="row">
+            @foreach (var speaker in currentEvent.Speakers)
+            {
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">@speaker.Name</h5>
+                        <h6 class="card-subtitle mb-2 text-primary fw-bold">@speaker.Talk</h6>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </section>
+    }
+
+    @if (currentEvent.Agenda != null && currentEvent.Agenda.Any())
+    {
+    <section id="agenda" class="mb-5">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="h3 text-primary mb-4 border-bottom pb-2">Agenda</h2>
+                <div class="card">
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-lg-8 offset-lg-2">
+                                <table class="table table-hover">
+                                    <tbody>
+                                    @foreach (var item in currentEvent.Agenda)
+                                    {
+                                    <tr>
+                                        <td>@item.Time</td>
+                                        <td>
+                                            <h5>@item.Topic</h5>
+                                        </td>
+                                    </tr>
+                                    }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    }
+
+    <section id="venue">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="h3 text-primary mb-4 border-bottom pb-2">Venue and Parking Locations</h2>
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="p-4">
+                            <h4 class="h5 mb-2">@currentEvent.Location</h4>
+                            <p class="text-muted mb-0">
+                                <i class="bi bi-geo-alt-fill text-primary me-2"></i>
+                                Vičava 1, 2250 Ptuj, Slovenia
+                            </p>
+                        </div>
+                        <div class="map-container ratio ratio-16x9">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d281.055!2d15.8636236!3d46.4221844!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e2!4m3!3m2!1d46.4221955!2d15.8641547!4m3!3m2!1d46.421719!2d15.86549!4m3!3m2!1d46.421719!2d15.86549!5e0!3m2!1sen!2ssi!4v1725986400000"
+                                width="100%"
+                                height="450"
+                                style="border:0;"
+                                allowfullscreen=""
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+}
+
+@code {
+[Parameter]
+public int Id { get; set; }
+
+private PastEvent? currentEvent;
+
+protected override async Task OnInitializedAsync()
+{
+try
+{
+var pastEvents = await Http.GetFromJsonAsync<PastEvent[]>("Data/PastEvents.json");
+currentEvent = pastEvents?.FirstOrDefault(e => e.Id == Id);
+}
+catch (Exception ex)
+{
+Console.WriteLine($"Error loading past event details: {ex.Message}");
+}
+}
+}
