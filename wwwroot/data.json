@@ -1,0 +1,58 @@
+[
+  {
+    "eventId": "42vcc4ib",
+    "name": ".NET & Azure Meetup Štajerska - October 2025",
+    "description": "We’re a group of developers, tech enthusiasts, and professionals passionate about .NET, Azure, and related technologies. Whether you're a seasoned expert or just starting your journey, you’re welcome here! This is the first official meetup, taking place on October, 16th in Tehnološki park Ptuj.",
+    "callForPapersUrl": null,
+    "ticketsUrl": "https://www.yourticketurl.com",
+    "eventStartsAt": "2025-10-16T18:30:00+02:00",
+    "eventEndsAt": "2025-10-16T21:00:00+02:00",
+    "location": {
+      "name": "Tehnološki park Ptuj",
+      "address": "Vicava 1, 2250 Ptuj, Slovenia",
+      "mapsUrl": "https://maps.app.goo.gl/hReM2Geakmmkv63Y6",
+      "embeddedMapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3416.464259029094!2d15.86549!3d46.42171899999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x476f66b3e9b9ae3d%3A0xc6d5caa945b1275f!2sVi%C4%8Dava%201%2C%202250%20Ptuj!5e1!3m2!1sen!2ssi!4v1759162943677!5m2!1sen!2ssi",
+      "parkings": [
+        {
+          "name": "Brezplačno parkiranje pred Zgodovinskim arhivom na Ptuju",
+          "address": null,
+          "mapsUrl": "https://maps.app.goo.gl/CUJcmNGrUzpyGFfBA"
+        }
+      ]
+    },
+    "photos": [
+      "/images/20251016/1.jpg",
+      "/images/20251016/2.jpg",
+      "/images/20251016/3.jpg",
+      "/images/20251016/4.jpg"
+    ]
+  },
+  {
+    "eventId": "42vcc4ib",
+    "name": "ANOTHER .NET & Azure Meetup Štajerska - October 2025",
+    "description": "We’re a group of developers, tech enthusiasts, and professionals passionate about .NET, Azure, and related technologies. Whether you're a seasoned expert or just starting your journey, you’re welcome here! This is the first official meetup, taking place on October, 16th in Tehnološki park Ptuj.",
+    "callForPapersUrl": null,
+    "ticketsUrl": "https://www.yourticketurl.com",
+    "eventStartsAt": "2025-10-16T18:30:00+02:00",
+    "eventEndsAt": "2025-10-16T21:00:00+02:00",
+    "location": {
+      "name": "Tehnološki park Ptuj",
+      "address": "Vicava 1, 2250 Ptuj, Slovenia",
+      "mapsUrl": "https://maps.app.goo.gl/hReM2Geakmmkv63Y6",
+      "embeddedMapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3416.464259029094!2d15.86549!3d46.42171899999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x476f66b3e9b9ae3d%3A0xc6d5caa945b1275f!2sVi%C4%8Dava%201%2C%202250%20Ptuj!5e1!3m2!1sen!2ssi!4v1759162943677!5m2!1sen!2ssi",
+      "parkings": [
+        {
+          "name": "Brezplačno parkiranje pred Zgodovinskim arhivom na Ptuju",
+          "address": null,
+          "mapsUrl": "https://maps.app.goo.gl/CUJcmNGrUzpyGFfBA"
+        }
+      ]
+    },
+    "photos": [
+      "/images/20251016/1.jpg",
+      "/images/20251016/2.jpg",
+      "/images/20251016/3.jpg",
+      "/images/20251016/4.jpg"
+    ]
+  }
+]

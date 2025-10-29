@@ -1,34 +1,24 @@
+using MeetupWebsite.Data;
+using MeetupWebsite.Services;
 using MeetupWebsite.Sessionize;
 using Microsoft.AspNetCore.Components;
 
 namespace MeetupWebsite.Pages
 {
-    public partial class Home(SessionizeClient sessionizeClient, ILogger<Home> logger, IConfiguration configuration)
+    public partial class Home(EventsRepository repository, ILogger<Home> logger, IConfiguration configuration)
     {
-        private SessionizeResponse? sessionizeData;
-        private SessionizeDaySchedule[]? scheduleData;
+        private EventEntry? eventEntry;
 
         protected override async Task OnInitializedAsync()
         {
             try
             {
-                var eventId = configuration["Sessionize:EventId"];
-
-                sessionizeData = await sessionizeClient.GetDataAsync(eventId);
-                scheduleData = await sessionizeClient.GetScheduleAsync(eventId);
+                eventEntry = (await repository.GetEventsAsync()).First();
             }
             catch (Exception ex)
             {
-                logger.LogError($"Error fetching Sessionize data: {ex.Message}");
+                logger.LogError($"Error fetching data: {ex.Message}");
             }
-        }
-
-        private MarkupString GetMarkup(string? text)
-        {
-            // put <br> tags in for new lines, since Sessionize uses plain text with new lines
-
-            text = text?.Replace("\n", "<br />");
-            return new MarkupString(text ?? string.Empty);
         }
 
     }

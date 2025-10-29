@@ -1,0 +1,183 @@
+﻿@using System.Globalization
+@using MeetupWebsite.Sessionize
+
+<!-- Upcoming Event Section -->
+<section class="mb-5">
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body p-4">
+					<div class="row align-items-center">
+						<div class="col-md-8">
+							<div class="d-flex align-items-center">
+								<div class="date-badge text-white rounded-3 p-3 me-4 text-center">
+									<div class="h4 mb-0 fw-bold">@EventEntry.EventStartsAt.ToString("dd")</div>
+									<div class="small">@EventEntry.EventStartsAt.ToString("MMM").ToUpperInvariant()</div>
+								</div>
+								<div>
+									<h3 class="h5 mb-1">@EventEntry.Name</h3>
+									<p class="text-muted mb-0">
+										<i class="bi bi-clock me-1"></i> 
+										@EventEntry.EventStartsAt.ToString("HH:mm", CultureInfo.InvariantCulture)
+										-
+										@EventEntry.EventEndsAt.ToString("HH:mm", CultureInfo.InvariantCulture) 
+										<i class="bi bi-geo-alt ms-3 me-1"></i>@EventEntry.Location.Name
+									</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-4 text-md-end">
+							@if (!string.IsNullOrWhiteSpace(EventEntry.TicketsUrl))
+							{
+								<div class="d-inline-flex flex-column gap-2">
+									<a href="@EventEntry.TicketsUrl"
+									   target="_blank"
+									   class="btn btn-primary btn-lg px-4">
+										<i class="bi bi-ticket-perforated me-2"></i>Reserve your seat
+									</a>
+								</div>
+							}
+
+							@if (!string.IsNullOrWhiteSpace(EventEntry.CallForPapersUrl))
+							{
+								<div class="d-inline-flex flex-column gap-2 mt-2">
+									<a href="@EventEntry.CallForPapersUrl"
+									   target="_blank"
+									   class="btn btn-secondary btn-lg px-4">
+										<i class="bi bi-megaphone me-2"></i>Call for Papers
+									</a>
+								</div>
+							}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Speaker Section -->
+@if (sessionizeData?.Speakers?.Count > 0)
+{
+	<section id="speakers" class="mb-5">
+		<h2 class="h3 text-primary mb-4 border-bottom pb-2">Speakers</h2>
+		<div class="row text-center">
+			@foreach (var speaker in sessionizeData.Speakers.OrderBy(_ => Random.Shared.Next()))
+			{
+				<div class="col-lg-4 col-md-6 mb-4">
+					<div class="card speaker-card h-100">
+						<img src="@speaker.ProfilePicture" class="speaker-image card-img-top" alt="@speaker.FullName" />
+						<div class="card-body">
+							<h5 class="card-title fw-bold">@speaker.FullName</h5>
+							<p class="card-text text-muted">@speaker.TagLine</p>
+
+							@foreach (var session in sessionizeData.Sessions.Where(s => s.Speakers.Contains(speaker.Id)))
+							{
+								<h6 class="card-subtitle mb-2 mt-3 text-primary fw-bold">@session.Title</h6>
+							}
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	</section>
+}
+else
+{
+	<p class="text-muted">Speakers will be announced soon. Stay tuned!</p>
+}
+
+<!-- Agenda Section -->
+<section id="agenda" class="mb-5">
+	<div class="row">
+		<div class="col-12">
+			<h2 class="h3 text-primary mb-4 border-bottom pb-2">Agenda</h2>
+			<div class="card">
+				<div class="card-body p-4">
+					<div class="row">
+						<div class="col-lg-8 offset-lg-2">
+							@if (scheduleData is not null)
+							{
+								foreach (var day in scheduleData)
+								{
+									foreach (var room in day.Rooms)
+									{
+										<table class="table table-hover">
+											<tbody>
+												@foreach (var session in room.Sessions)
+												{
+													<tr>
+														<td>@session.StartsAt.ToString("HH:mm", CultureInfo.InvariantCulture)</td>
+														<td>
+															<h5>@session.Title</h5>
+															<div class="text-muted">
+																@foreach (var speaker in session.Speakers)
+																{
+																	<span>@speaker.Name</span>
+																}
+															</div>
+															@if (!string.IsNullOrWhiteSpace(session.Description))
+															{
+																<p>
+																	@(GetMarkup(session.Description))
+																</p>
+															}
+														</td>
+													</tr>
+												}
+											</tbody>
+										</table>
+									}
+								}
+							}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Location Section -->
+<section id="venue">
+	<div class="row">
+		<div class="col-12">
+			<h2 class="h3 text-primary mb-4 border-bottom pb-2">Venue and Parking Locations</h2>
+			<div class="card">
+				<div class="card-body p-0">
+					<div class="p-4">
+						<h4 class="h5 mb-2">@EventEntry.Location.Name</h4>
+						<p class="text-muted mb-0">
+							<a href="@EventEntry.Location.MapsUrl" target="_blank">
+							<i class="bi bi-geo-alt-fill text-primary me-2"></i>
+								@EventEntry.Location.Address
+							</a>
+						</p>
+
+						@foreach(var parking in EventEntry.Location.Parkings)
+						{
+							<p class="text-muted">
+								<a href="@parking.MapsUrl" target="_blank">
+									<i class="bi bi-p-square-fill text-primary me-2"></i>
+									@parking.Name
+								</a>
+							</p>
+						}
+					</div>
+
+					<div class="map-container ratio ratio-16x9">
+						<iframe src="@EventEntry.Location.EmbeddedMapUrl"
+								width="100%"
+								height="450"
+								style="border:0;"
+								allowfullscreen=""
+								loading="lazy"
+								referrerpolicy="no-referrer-when-downgrade">
+						</iframe>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
