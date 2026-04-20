@@ -14,16 +14,45 @@
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
             </NavLink>
         </div>
+        @if (!string.IsNullOrWhiteSpace(callForSpeakersUrl))
+        {
+            <div class="nav-item px-3">
+                <a class="nav-link" href="@callForSpeakersUrl" target="_blank" rel="noopener noreferrer">
+                    <span class="bi bi-megaphone-fill" aria-hidden="true"></span> Call for Speakers
+                </a>
+            </div>
+        }
     </nav>
 </div>
 
+@using MeetupWebsite.Data
+@using MeetupWebsite.Services
+@inject EventsRepository EventsRepository
+
 @code {
     private bool collapseNavMenu = true;
+    private string? callForSpeakersUrl;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var events = await EventsRepository.GetEventsAsync();
+            callForSpeakersUrl = events
+                .Where(e => e.EventStartsAt > DateTimeOffset.UtcNow && !string.IsNullOrWhiteSpace(e.CallForPapersUrl))
+                .Select(e => e.CallForPapersUrl)
+                .FirstOrDefault();
+        }
+        catch
+        {
+            // Navigation still works without CFP link
+        }
     }
 }

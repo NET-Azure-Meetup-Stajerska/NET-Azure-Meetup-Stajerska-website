@@ -1,25 +1,33 @@
 using MeetupWebsite.Data;
 using MeetupWebsite.Services;
-using MeetupWebsite.Sessionize;
 using Microsoft.AspNetCore.Components;
 
 namespace MeetupWebsite.Pages
 {
-    public partial class Home(EventsRepository repository, ILogger<Home> logger, IConfiguration configuration)
+    public partial class Home(EventsRepository repository, ILogger<Home> logger)
     {
-        private EventEntry? eventEntry;
+        private List<(int Index, EventEntry Event)>? upcomingEvents;
+        private List<(int Index, EventEntry Event)>? pastEvents;
 
         protected override async Task OnInitializedAsync()
         {
             try
             {
-                eventEntry = (await repository.GetEventsAsync()).First();
+                var now = DateTimeOffset.UtcNow;
+                var all = (await repository.GetEventsAsync())
+                    .Index()
+                    .Select(x => (Index: x.Index + 1, Event: x.Item))
+                    .ToList();
+
+                upcomingEvents = all.Where(x => x.Event.EventStartsAt > now).ToList();
+                pastEvents = all.Where(x => x.Event.EventStartsAt <= now).ToList();
             }
             catch (Exception ex)
             {
-                logger.LogError($"Error fetching data: {ex.Message}");
+                logger.LogError("Error fetching events: {Message}", ex.Message);
+                upcomingEvents = [];
+                pastEvents = [];
             }
         }
-
     }
 }

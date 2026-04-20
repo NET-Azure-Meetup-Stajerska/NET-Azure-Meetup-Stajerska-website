@@ -2,14 +2,18 @@ using MeetupWebsite.Data;
 using MeetupWebsite.Services;
 using MeetupWebsite.Sessionize;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace MeetupWebsite.Pages
 {
     public partial class EventEntryDisplay(SessionizeClient sessionizeClient
-        , ILogger<EventEntryDisplay> logger)
+        , ILogger<EventEntryDisplay> logger
+        , NavigationManager navigationManager
+        , IJSRuntime jsRuntime)
     {
         private SessionizeResponse? sessionizeData;
         private SessionizeDaySchedule[]? scheduleData;
+        private bool _fancyboxInitialized = false;
 
         [Parameter]
         public EventEntry EventEntry { get; set; } = null!;
@@ -28,6 +32,18 @@ namespace MeetupWebsite.Pages
                 logger.LogError($"Error fetching Sessionize data: {ex.Message}");
             }
         }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (EventEntry.Photos?.Length > 0 && !_fancyboxInitialized)
+            {
+                _fancyboxInitialized = true;
+                await jsRuntime.InvokeVoidAsync("initializeFancybox");
+            }
+        }
+
+        private string PhotoUrl(string path) =>
+            navigationManager.BaseUri + path.TrimStart('/');
 
         private MarkupString GetMarkup(string? text)
         {

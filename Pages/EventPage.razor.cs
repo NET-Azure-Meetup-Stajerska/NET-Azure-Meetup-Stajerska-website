@@ -8,7 +8,7 @@ namespace MeetupWebsite.Pages
     public partial class EventPage(EventsRepository repository)
     {
         [Parameter]
-        public int Id { get; set; }
+        public string Slug { get; set; } = "";
 
         private EventEntry? currentEvent;
 
@@ -16,8 +16,8 @@ namespace MeetupWebsite.Pages
         {
             try
             {
-                var pastEvents = await repository.GetEventsAsync();
-                currentEvent = pastEvents.ElementAtOrDefault(Id - 1);
+                var events = await repository.GetEventsAsync();
+                currentEvent = events.FirstOrDefault(e => e.Slug == Slug);
             }
             catch (Exception ex)
             {

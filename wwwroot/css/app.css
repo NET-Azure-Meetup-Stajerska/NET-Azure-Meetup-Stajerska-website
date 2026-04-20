@@ -135,6 +135,61 @@ main {
     flex-shrink: 0;
 }
 
+.date-badge-past {
+    background-color: var(--secondary-color);
+}
+
+/* ==========================================================================
+   5b. Hero Section
+   ========================================================================== */
+
+.hero-section {
+    background: linear-gradient(135deg, var(--hero-gradient-start) 0%, var(--hero-gradient-end) 100%);
+    color: #ffffff;
+    padding-top: calc(var(--navbar-height) + 3rem);
+}
+
+.hero-section h1 {
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.hero-section .lead {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.btn-discord {
+    background-color: #5865f2;
+    border-color: #5865f2;
+    color: #ffffff;
+    transition: all var(--transition-fast);
+    font-weight: 600;
+}
+
+.btn-discord:hover {
+    background-color: #4752c4;
+    border-color: #4752c4;
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(88, 101, 242, 0.4);
+}
+
+/* ==========================================================================
+   5c. Inline Loading Spinner
+   ========================================================================== */
+
+.loading-spinner {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
 /* ==========================================================================
    6. Buttons
    ========================================================================== */

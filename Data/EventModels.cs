@@ -7,6 +7,8 @@ namespace MeetupWebsite.Data
     {
         [JsonPropertyName("eventId")]
         public string EventId { get; set; }
+        [JsonPropertyName("slug")]
+        public string Slug { get; set; }
         [JsonPropertyName("name")]
         public string Name { get; set; }
         [JsonPropertyName("description")]
